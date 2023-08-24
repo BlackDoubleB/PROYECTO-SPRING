@@ -1,0 +1,33 @@
+package edu.pe.idat.controller;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.pe.idat.request.ReservaCreateRequest;
+import edu.pe.idat.response.TransactionResponse;
+
+@RestController
+@RequestMapping("/api/reserva")
+public class ReservaApiController {
+
+	
+	@PostMapping("/create")
+	@PreAuthorize("hasRole('CONSUMIDOR')")
+	public TransactionResponse createReserva(@RequestBody ReservaCreateRequest request) {
+		try {
+			
+			horarioReservaService.create(request);
+			
+			return new TransactionResponse(true, "Horario de Reserva creado con éxito.");
+			
+		}catch(Exception e) {
+			
+			return new TransactionResponse(false, "Ocurrió un error al registrar el Horario de Reserva.");
+			
+		}
+	}
+	
+}

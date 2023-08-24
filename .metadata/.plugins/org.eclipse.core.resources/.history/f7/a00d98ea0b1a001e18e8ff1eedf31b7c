@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>SideBar</title>
+</head>
+
+<body>
+
+	<!-- The Modal -->
+	<div class="modal fade" id="modalCrear" th:fragment="modal-crear">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header bg-primary text-white">
+					<h4 class="modal-title">Usuario</h4>
+					<!-- <button type="button" class="btn-close" data-bs-dismiss="modal"></button> -->
+				</div>
+				<!-- Modal Main -->
+				<div class="modal-body">
+					<form action="">
+						<!--  General -->
+						<div class="form-group" style="gap: 0.5rem">
+							<div class="controls-main col-lg-12">
+								<label for="name">Nombres Completos</label>
+								<div class="controls">
+									<input type="text" id="name" class="form-control" name="name">
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="email">Correo Electronico</label>
+								<div class="controls">
+									<input type="text" id="email" class="form-control" name="email">
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="fruit">Rol</label>
+								<div class="controls">
+									<select class="form-select">
+										<option value="blank"></option>
+										<option value="Pendiente">Pendiente</option>
+										<option value="Asistio" selected>Asistio</option>
+										<option value="Cancelado">Cancelado</option>
+									</select>
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="email">Usuario</label>
+								<div class="controls">
+									<input type="text" id="email" class="form-control" name="email">
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="fruit">Estado</label>
+								<div class="controls">
+									<select class="form-select">
+										<option value="blank"></option>
+										<option value="Alta">Alta</option>
+										<option value="Baja" selected>Baja</option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+					</form>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn button-guardar btn-primary"
+						data-bs-dismiss="modal">Guardar</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+				</div>
+				<!--  -->
+			</div>
+		</div>
+	</div>
+	<!--Fin Modal -->
+
+</body>
+
+</html>

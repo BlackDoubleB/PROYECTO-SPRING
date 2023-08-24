@@ -1,0 +1,9 @@
+package edu.pe.idat.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import edu.pe.idat.model.Consumidor;
+
+public interface ConsumidorRepository extends JpaRepository<Consumidor, Integer> {
+
+}

@@ -1,0 +1,22 @@
+package edu.pe.idat.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.Rol;
+import edu.pe.idat.repository.RolesRepository;
+
+@Service
+public class RolesService {
+
+	@Autowired
+	private RolesRepository rolesRepository;
+	
+	public List<Rol> findAll(){
+		
+		return rolesRepository.findAll();
+		
+	}
+}

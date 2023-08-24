@@ -1,0 +1,11 @@
+$(document).ready(function() {
+	configurarValoresPorDefecto()
+});
+
+function configurarValoresPorDefecto() {
+	
+	let fechaInput = document.getElementById("fecha-reserva")
+
+	fechaInput.value = dayjs().format("YYYY-MM-DD")
+	console.log(fechaInput)
+}

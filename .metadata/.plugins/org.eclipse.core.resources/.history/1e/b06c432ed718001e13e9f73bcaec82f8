@@ -1,0 +1,21 @@
+document.addEventListener("DOMContentLoaded", function() { 
+    habilitarBtnRegistrarHorarioReserva();
+});
+
+function habilitarBtnRegistrarHorarioReserva(){
+	let btnRegistrarHorarioReserva = document.getElementById("registrar-horario-reserva")
+	
+	btnRegistrarHorarioReserva.addEventListener('click', function(){
+    	registrarHorarioReserva()
+	})
+}
+
+function registrarHorarioReserva(){
+	let fecha = document.getElementById("fecha-reserva");
+	let horario = document.getElementById("horario-reserva");
+	let mesas = document.getElementById("mesas-reserva");
+	
+	console.log(fecha)
+	console.log(horario)
+	console.log(mesas)
+}

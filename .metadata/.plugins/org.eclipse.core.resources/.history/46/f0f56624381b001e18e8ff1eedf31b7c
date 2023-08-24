@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Ver Ticket</title>
+</head>
+
+<body>
+
+
+	<div class="modal fade" id="modalVerTicket" th:fragment="modal">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Resumen</h4>
+					<img src="./images/logo-login.png" width="70" height="70" alt="">
+				</div>
+				<!-- Modal Main -->
+				<div class="modal-body">
+					<form action="">
+						<!--  General -->
+						<div class="form-group">
+							<div class="controls-main col-lg-12">
+								<label for="name">Id_Ticket</label>
+								<div class="controls">
+									<input type="text" id="name" class="form-control" name="name">
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="name">Nombres Completos</label>
+								<div class="controls">
+									<input type="text" id="name" class="form-control" name="name">
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="phone">Telefono</label>
+								<div class="controls">
+									<input type="tel" id="phone" class="form-control" name="phone">
+								</div>
+							</div>
+
+							<div class="controls-main col-lg-12">
+								<label for="email">Correo Electronico</label>
+								<div class="controls">
+									<input type="text" id="email" class="form-control" name="email">
+								</div>
+							</div>
+
+							<div class="controls-main col-lg-12">
+								<label for="fruit">Fecha de Reserva</label>
+								<div class="controls">
+									<select class="form-select">
+										<option value="blank"></option>
+										<option value="28/06/2023">1</option>
+										<option value="29/06/2023" selected>29/06/2023</option>
+										<option value="30/06/2023">3</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="controls-main col-lg-12">
+								<label for="fruit">Horario</label>
+								<div class="controls">
+									<select class="form-select">
+										<option value="blank"></option>
+										<option value="1">1</option>
+										<option value="2" selected>14:04:06</option>
+										<option value="3">3</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="controls-main col-lg-12">
+								<label for="fruit">Cantidad de Personas</label>
+								<div class="controls">
+									<select class="form-select">
+										<option value="blank"></option>
+										<option value="1">1</option>
+										<option value="2" selected>2</option>
+										<option value="3">3</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="controls-main col-lg-12">
+								<label class="infor-text"></i>Comentarios Adicionales</label>
+								<div class="controls">
+									<textarea name="comments" class="form-control" id="comments"
+										placeholder="Ingrese sus comentarios aquí"></textarea>
+								</div>
+							</div>
+							<div class="controls-main col-lg-12">
+								<label for="fruit">Estado</label>
+								<div class="controls">
+									<select class="form-select">
+										<option value="blank"></option>
+										<option value="Pendiente">Pendiente</option>
+										<option value="Asistio" selected>Asistio</option>
+										<option value="Cancelado">Cancelado</option>
+									</select>
+								</div>
+							</div>
+
+						</div>
+					</form>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn button-descargar btn-success"
+						data-bs-dismiss="modal">Descargar</button>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+				<!--  -->
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>

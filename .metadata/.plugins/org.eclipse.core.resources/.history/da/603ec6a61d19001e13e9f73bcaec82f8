@@ -1,0 +1,9 @@
+$(document).ready(function() { 
+    habilitarInputFechaOnChange();
+});
+
+function habilitarInputFechaOnChange(){
+	$("#fecha-reserva").change(function(){
+		console.log(this)
+	})
+}

@@ -1,0 +1,18 @@
+function obtenerTokenDesdeLocalStorage(){
+	if(!validarlocalStorage()){
+		alert("El navegador no soporta LocalStorage.")
+		return null
+	}
+	
+	const token = localStorage.getItem("at")
+	
+	if(!token){
+		return null
+	}
+	
+	return "Bearer " + token;
+}
+
+function validarlocalStorage(){
+	return localStorage != null
+}

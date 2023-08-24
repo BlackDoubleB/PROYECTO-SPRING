@@ -1,0 +1,76 @@
+package edu.pe.idat.security;
+
+import java.security.Key;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.io.Decoders;
+import io.jsonwebtoken.security.Keys;
+
+public class JwtTokenUtils {
+	
+	private final static String ACCESS_TOKEN_SECRET = "4276d50f05d2cac4c98c17337ac30c99gbhas44654sd5sds";
+	private final static Long ACCESS_TOKEN_VALIDITY_SECONDS = 86_400L;
+	
+	public static String createToken(String username, String nombres) {
+		long expirationTime = ACCESS_TOKEN_VALIDITY_SECONDS * 1_000;
+		Date expirationDate = new Date(System.currentTimeMillis() + expirationTime);
+		
+		Map<String, Object> extra = new HashMap<>();
+		extra.put("username", username);
+		extra.put("nombres", nombres);
+		
+		return Jwts.builder()
+				.setSubject(username)
+				.setExpiration(expirationDate)
+				.addClaims(extra)
+				.signWith(getSignatureKey(), SignatureAlgorithm.HS256)
+				.compact();
+	}
+	
+	public static Key getSignatureKey() {
+		byte[] keyBytes = Decoders.BASE64.decode(ACCESS_TOKEN_SECRET);
+		
+		return Keys.hmacShaKeyFor(keyBytes);
+	}
+	
+	public static <T> T getClaim(String token, Function<Claims, T> claimsFunction) {
+		Claims claims = extractAllClaims(token);
+		return claimsFunction.apply(claims);
+	}
+	
+	public static Claims extractAllClaims(String token) {
+		return Jwts.parserBuilder()
+				.setSigningKey(getSignatureKey())
+				.build()
+				.parseClaimsJws(token)
+				.getBody();
+	}
+	
+	public static UsernamePasswordAuthenticationToken getAuthentication(String token) {
+		
+		try {
+			
+			Claims claims = extractAllClaims(token);
+			
+			String username = claims.getSubject();
+			
+			return new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+			
+		}catch(JwtException e) {
+			
+			return null;
+			
+		}
+		
+	}
+}

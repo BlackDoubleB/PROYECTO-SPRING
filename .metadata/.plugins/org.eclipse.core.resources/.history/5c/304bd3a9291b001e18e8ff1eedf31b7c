@@ -1,0 +1,27 @@
+$(document).ready(function() {
+	habilitarComboFechasOnChange()
+	
+	configurarValoresPorDefecto()
+});
+
+function configurarValoresPorDefecto(){
+	
+	let fechaInput = document.getElementById("fecha-reserva")
+	//let horarioInput = document.getElementById("horario-reserva")
+	//let mesasInput = document.getElementById("mesas-reserva")
+	
+	fechaInput.value = ""
+	fechaInput.min = dayjs().format("YYYY-MM-DD")
+}
+
+function habilitarComboFechasOnChange(){
+	$("#fecha-reserva").change(function(){
+		obtenerHorariosPorFecha(this)
+	})
+}
+
+function obtenerHorariosPorFecha(e){
+	let fecha = $(e).val()
+	
+	console.log(fecha)
+}

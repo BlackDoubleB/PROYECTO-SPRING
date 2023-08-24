@@ -1,0 +1,28 @@
+1688302944428	Rename type 'ConfiguracionController'
+1688312450621	Rename type 'ReservasController'
+1688334837260	Rename resource 'crear-usuario-a.html'
+1688336004680	Rename type 'Usuario'
+1688436733349	Rename type 'UsuarioCrearRequest'
+1688437145419	Encapsulate field 'dni'
+1688437228253	Encapsulate field 'telefono'
+1688444789889	Encapsulate field 'idTrabajador'
+1688472181192	Encapsulate field 'nombreRol'
+1688497617624	Delete element
+1688502609394	Rename resource 'login-c.js'
+1688527413661	Copy compilation units
+1688527647862	Copy compilation unit
+1688527656856	Copy compilation unit
+1688528739700	Copy file
+1688528757796	Rename resource 'scrip.js'
+1688532964568	Copy compilation unit
+1688532993468	Copy compilation unit
+1688533113516	Copy compilation unit
+1688533130838	Copy compilation unit
+1688533180652	Copy compilation unit
+1688533191997	Copy compilation unit
+1688534596277	Copy file
+1688536039584	Copy compilation unit
+1688536051245	Copy compilation unit
+1688536102230	Copy compilation unit
+1688559375660	Copy compilation unit
+1688572468075	Rename resource 'mis-reservas-table.html'

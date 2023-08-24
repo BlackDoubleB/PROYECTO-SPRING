@@ -1,0 +1,17 @@
+package edu.pe.idat;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+@SpringBootApplication
+public class ConamuPersonalApplication {
+	
+	public static void main(String[] args) {
+		
+		//var p = new BCryptPasswordEncoder().encode("1234");
+		
+		SpringApplication.run(ConamuPersonalApplication.class, args);
+	}
+
+}

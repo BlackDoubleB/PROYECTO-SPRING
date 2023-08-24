@@ -1,0 +1,32 @@
+$(document).ready(function() {
+habilitarBtnBuscar()
+});
+
+function habilitarBtnBuscar() {
+	$("#btn-buscar").click(function() {
+buscarPorNombre(this);
+	});
+}
+
+function buscarPorNombre(e) {
+	e.preventDefault();
+	
+	let nombres = $("#nombres-buscar").val()
+
+	$.ajax({
+		type: 'GET',
+		url: '/usuarios/table/' + nombres,
+		data: {},
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".datagrid").html(response)
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}

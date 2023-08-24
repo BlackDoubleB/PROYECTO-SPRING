@@ -1,0 +1,44 @@
+export class Security{
+	obtenerTokenDesdeLocalStorage(){
+		if(!validarlocalStorage()){
+			alert("El navegador no soporta LocalStorage.")
+			return null
+		}
+		
+		const token = localStorage.getItem("at")
+		
+		if(!token){
+			return null
+		}
+		
+		return "Bearer " + token;
+	}
+	
+	validarlocalStorage(){
+		var s = new Security()
+		s.obtenerTokenDesdeLocalStorage
+		return localStorage != null
+	}
+}
+
+
+//function obtenerTokenDesdeLocalStorage(){
+//	if(!validarlocalStorage()){
+//		alert("El navegador no soporta LocalStorage.")
+//		return null
+//	}
+//	
+//	const token = localStorage.getItem("at")
+//	
+//	if(!token){
+//		return null
+//	}
+//	
+//	return "Bearer " + token;
+//}
+//
+//function validarlocalStorage(){
+//	var s = new Security()
+//	s.obtenerTokenDesdeLocalStorage
+//	return localStorage != null
+//}

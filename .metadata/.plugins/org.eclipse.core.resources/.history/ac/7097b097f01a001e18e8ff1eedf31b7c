@@ -1,0 +1,26 @@
+package edu.pe.idat.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.Consumidor;
+import edu.pe.idat.repository.ConsumidorRepository;
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class ConsumidorService {
+
+	@Autowired
+	private ConsumidorRepository consumidorRepository;
+	
+	public Consumidor findOneByUsuario(String usuario) {
+		var consumidor = consumidorRepository.findOneByUsuario(usuario);
+		
+		if(!consumidor.isPresent()) {
+			throw new EntityNotFoundException("No se encontró el Usuario con username ".concat(usuario));
+		}
+		
+		return consumidor.get();
+	}
+	
+}

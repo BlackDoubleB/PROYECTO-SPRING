@@ -1,0 +1,73 @@
+$(document).ready(function() {
+	habilitarBtnBuscar()
+	habilitarBtnCrear()
+	habilitarBtnGuardarUsuario()
+});
+
+function habilitarBtnGuardarUsuario(){
+	$(".button-guardar").click(function () {
+		procesarGuardarUsuario()
+	})
+}
+
+function habilitarBtnCrear() {
+	$("#btn-crear").click(function() {
+		cargarModalCrear()
+	})
+}
+
+function habilitarBtnBuscar() {
+	$("#btn-buscar").click(function(e) {
+		buscarPorNombre(e);
+	});
+}
+
+function procesarGuardarUsuario(){
+	console.log("guardar usuario")
+}
+
+function cargarModalCrear() {
+	$.ajax({
+		type: 'GET',
+		url: '/usuarios/modal-crear',
+		data: {},
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".modals").html(response)
+
+			$("#modalCrear").modal("show")
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}
+
+function buscarPorNombre(e) {
+	e.preventDefault();
+
+	let nombre = $("#nombres-buscar").val()
+
+	$.ajax({
+		type: 'GET',
+		url: '/usuarios/table/' + nombre,
+		data: {
+			nombre
+		},
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".datagrid").html(response)
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}

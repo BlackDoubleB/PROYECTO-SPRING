@@ -1,0 +1,31 @@
+package edu.pe.idat.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.HorarioReserva;
+import edu.pe.idat.repository.HorarioReservaRepository;
+import edu.pe.idat.request.HorarioReservaCreateRequest;
+
+@Service
+public class HorarioReservaService {
+
+	@Autowired
+	private HorarioReservaRepository horarioReservaRepository;
+	
+	public void create(HorarioReservaCreateRequest request) {
+		
+		horarioReservaRepository.create(request.getFecha(), request.getHorario(), request.getNumeroMesas());
+		
+	}
+	
+	public List<HorarioReserva> findAll(){
+		
+		return horarioReservaRepository.findAll(Sort.by(Direction.DESC, "Fecha"));
+		
+	}
+}

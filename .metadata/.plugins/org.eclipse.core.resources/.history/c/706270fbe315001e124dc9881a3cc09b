@@ -1,0 +1,55 @@
+package edu.pe.idat.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.Persona;
+import edu.pe.idat.model.User;
+import edu.pe.idat.repository.UserRepository;
+import jakarta.transaction.Transactional;
+
+@Service
+public class UserService {
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Autowired
+	private PersonaService personaService;
+	
+	
+	public void createUser (User user) {
+		
+		userRepository.createUser(user.getUsername(), user.getPassword(), user.getStatus(),
+				user.getDescription(), user.getFirstLogin(), user.getCreationDate(), user.getCreationUser(),
+				user.getUpdateDate(), user.getUpdateUser());
+		
+	}
+	
+	public List<User> findAll(){
+		
+		return userRepository.findAll(Sort.by("username"));
+				
+	}
+	
+	public void updateUser(User user) {
+		
+		userRepository.updateUser(user.getIdUser().intValue(), user.getPassword(), user.getDescription(),
+				user.getStatus(), user.getFirstLogin());
+		
+	}
+	
+	@Transactional
+	public User addPersonaUser (Persona persona, User user) {
+		
+		personaService.addPersona(persona);
+		
+		return userRepository.save(user);
+		
+	}
+	
+	
+}

@@ -1,0 +1,210 @@
+$(document).ready(function() {
+	habilitarBtnRegistrarHorarioReserva();
+	habilitarBtnEliminarHorarioReserva();
+	habilitarBtnConfirmarEliminarHorario();
+	habilitarBtnSubirCarta();
+	habilitarBtnVerCarta();
+
+	setDefaultValues();
+});
+
+//configura los campos para agregar horarios a sus valores por defecto
+function setDefaultValues() {
+	let fechaInput = document.getElementById("fecha-reserva")
+	let horarioInput = document.getElementById("horario-reserva")
+	let mesasInput = document.getElementById("mesas-reserva")
+
+	fechaInput.value = dayjs().format("YYYY-MM-DD")
+	fechaInput.min = dayjs().format("YYYY-MM-DD")
+
+	horarioInput.value = dayjs().format("HH:mm")
+
+	mesasInput.value = 1
+}
+
+function habilitarBtnSubirCarta() {
+	$("#btn-subir-carta").click(function(e) {
+		procesarSubirCarta(e)
+	})
+}
+
+function habilitarBtnVerCarta() {
+	$("#btn-ver-carta").click(function(e) {
+		procesarVerCarta(e)
+	})
+}
+
+function habilitarBtnConfirmarEliminarHorario() {
+	$("#confirmar-eliminar-horario").click(function() {
+		confirmarEliminarHorario()
+	})
+}
+
+function habilitarBtnEliminarHorarioReserva() {
+	$(".btn-eliminar-horario").click(function() {
+		eliminarHorarioReserva(this)
+	})
+}
+
+function habilitarBtnRegistrarHorarioReserva() {
+	$("#registrar-horario-reserva").click(function() {
+		registrarHorarioReserva()
+	})
+}
+
+function procesarVerCarta(e) {
+	e.preventDefault();
+
+	var settings = {
+		"url": "http://localhost:8080/api/media/carta.pdf",
+		"method": "GET",
+		"timeout": 0,
+	};
+
+	$.ajax(settings).done(function(response) {
+		if (!response) {
+			toastr["warning"]("No hay carta subida.", "Validación")
+			return
+		}
+		
+		console.log
+		
+		var blob = new Blob(response, { type: 'application/pdf' });
+
+		var blobURL = URL.createObjectURL(blob);
+
+		// Abrir la URL del objeto Blob en una nueva pestaña
+		window.open(blobURL, '_blank');
+
+		// Liberar recursos cuando ya no sean necesarios (opcional)
+		//window.URL.revokeObjectURL(blobURL);
+
+	});
+}
+
+function procesarSubirCarta(e) {
+	e.preventDefault()
+
+	var file = $("#archivo-carta").prop("files")[0]
+
+	if (!file) {
+		toastr["warning"]("Debe seleccionar un archivo para subir.", "Validación")
+		return
+	}
+
+	var ext = $("#archivo-carta").val().split('.').pop();
+
+	if (ext?.toLowerCase() != "pdf") {
+		toastr["warning"]("El archivo debe ser de tipo PDF.", "Validación")
+		return
+	}
+
+	var maxSize = 3 * 1024 * 1024; // 3MB in bytes
+	if (file.size > maxSize) {
+		toastr["warning"]("El archivo no puede superar los 3MB de tamaño.", "Validación");
+		return;
+	}
+
+	const form = new FormData()
+
+	form.append("file", file);
+
+	var settings = {
+		"url": "http://localhost:8080/api/media/upload",
+		"method": "POST",
+		"timeout": 0,
+		"processData": false,
+		"mimeType": "multipart/form-data",
+		"contentType": false,
+		"data": form
+	};
+
+	$.ajax(settings).done(function() {
+		toastr["success"]("Se ha subido el archivo con éxito!", "ÉXITO");
+		$("#archivo-carta").val("")
+	});
+}
+
+function confirmarEliminarHorario() {
+	let row = $("table tbody tr.selected");
+
+	if (!row) {
+		toastr["warning"]("Debe seleccionar una fila a eliminar.", "Validación")
+		//alert("Debe seleccionar una fila a eliminar.")
+		return;
+	}
+
+	let idHorario = $(row).attr("data-id-horario")
+
+	let data = {
+		idHorario: idHorario
+	}
+
+	$.ajax({
+		type: 'DELETE',
+		url: '/api/horario-reserva/delete',
+		data: data,
+		success: function(response) {
+			if (!response.success) {
+				//alert(response.message)
+				toastr["error"](response.message, "Error")
+				return;
+			}
+
+			location.reload();
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+
+			if (jqXHR.status == 401 || jqXHR.status == 403) {
+				toastr["error"]("No esta autorizado a realizar esta acción", "Error")
+				return
+			}
+
+			toastr["error"](jqXHR.status, "Error")
+		}
+	});
+}
+
+function eliminarHorarioReserva(e) {
+	$("table tbody tr").removeClass("selected")
+
+	$(e.closest("tr")).toggleClass("selected");
+}
+
+function registrarHorarioReserva() {
+	let fecha = $("#fecha-reserva").val();
+	let horario = $("#horario-reserva").val();
+	let mesas = $("#mesas-reserva").val();
+
+	let data = {
+		fecha: fecha,
+		horario: horario,
+		numeroMesas: mesas
+	};
+
+	$.ajax({
+		type: 'POST',
+		url: '/api/horario-reserva/create',
+		contentType: "application/json",
+		data: JSON.stringify(data),
+		success: function(response) {
+			if (!response.success) {
+				toastr["error"](response.message, "Error")
+				return;
+			}
+
+			location.reload();
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+
+			if (jqXHR.status == 401 || jqXHR.status == 403) {
+				toastr["error"]("No esta autorizado a realizar esta acción", "Error")
+				return
+			}
+
+			toastr["error"](jqXHR.status, "Error")
+		}
+	});
+}

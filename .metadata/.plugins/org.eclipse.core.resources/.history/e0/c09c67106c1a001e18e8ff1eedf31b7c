@@ -1,0 +1,98 @@
+package edu.pe.idat.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.EstadoTrabajador;
+import edu.pe.idat.model.Persona;
+import edu.pe.idat.model.Rol;
+import edu.pe.idat.model.Trabajador;
+import edu.pe.idat.repository.TrabajadorRepository;
+import edu.pe.idat.request.UsuarioCreateRequest;
+import edu.pe.idat.request.UsuarioUpdateRequest;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+
+@Service
+public class TrabajadorService {
+
+	@Autowired
+	private TrabajadorRepository trabajadorRepository;
+	
+	@Autowired
+	private PersonaService personaService;
+	
+	@Autowired
+	private RolesService rolesService;
+	
+	@Autowired
+	private EstadoTrabajadorService estadoTrabajadorService;
+	
+	public List<Trabajador> findAll(){
+		
+		return trabajadorRepository.findAll();
+		
+	}
+	
+	public Trabajador findById(Integer idTrabajador) {
+		
+		var trabajador = trabajadorRepository.findById(idTrabajador);
+		
+		if(!trabajador.isPresent()) {
+			throw new EntityNotFoundException("No se encontró el Usuario con id ".concat(idTrabajador.toString()));
+		}
+		
+		return trabajador.get();
+		
+	}
+	
+	public List<Trabajador> findAllByPersonaNombreCompletosContaining(String nombres){
+		
+		return trabajadorRepository.findAllByPersonaNombreCompletosContaining(nombres);
+		
+	}
+	
+	@Transactional
+	public Trabajador addPersonaTrabajador (UsuarioCreateRequest request) {
+		
+		Persona persona = new Persona();
+		persona.setDni(request.getDni());
+		persona.setCorreo(request.getCorreo());
+		persona.setNombreCompletos(request.getNombreCompletos());
+		persona.setTelefono(request.getTelefono());
+		
+		Rol rol = rolesService.findById(Integer.parseInt(request.getRol()));
+		
+		EstadoTrabajador estado = estadoTrabajadorService.findById(1);
+		
+		Trabajador trabajador = new Trabajador();
+		trabajador.setUsuario(request.getUsuario());
+		trabajador.setContrasena(request.getContrasena());
+		trabajador.setPersona(persona);
+		trabajador.setRol(rol);
+		trabajador.setEstadoTrabajador(estado);
+		
+		personaService.addPersona(persona);
+		
+		return trabajadorRepository.save(trabajador);
+		
+	}
+	
+	@Transactional
+	public void updateTrabajador(UsuarioUpdateRequest request) {
+		
+		Trabajador trabajador = findById(Integer.parseInt(request.getIdTrabajador()));
+		
+		trabajador.getPersona().setTelefono(request.getTelefono());
+		trabajador.getPersona().setCorreo(request.getCorreo());
+		
+		EstadoTrabajador estado = estadoTrabajadorService.findById(Integer.parseInt(request.getEstado()));
+		
+		trabajador.setEstadoTrabajador(estado);
+		
+		trabajadorRepository.save(trabajador);
+		
+	}
+}

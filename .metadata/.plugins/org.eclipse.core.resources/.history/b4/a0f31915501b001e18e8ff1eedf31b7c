@@ -1,0 +1,59 @@
+$(document).ready(function() {
+	habilitarBtnBuscarReservas()
+	habilitarBtnEditarReserva()
+});
+
+function habilitarBtnBuscarReservas(){
+	$("#btn-buscar-reserva").click(function(e){
+		procesarBusquedaReservas(e)
+	})
+}
+
+function habilitarBtnEditarReserva(){
+	$(".btn-editar-reserva").click(function(){
+		obtenerModalEditarReserva(this)
+	})
+}
+
+function procesarBusquedaReservas(e){
+	e.preventDefault();
+	
+	cargarTableUsuarios()
+}
+
+function obtenerModalEditarReserva(e){
+	const idReserva = $(e).attr("data-id-reserva")
+	
+	console.log(idReserva)
+}
+
+function cargarTableUsuarios() {
+	const nombres = $("#nombres-buscar-reserva").val()
+	
+	$.ajax({
+		type: 'GET',
+		url: '/reservas/table',
+		data: {
+			nombres
+		},
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".datagrid").html(response)
+			
+			habilitarBtnEditarReserva()
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			
+			if(jqXHR.status == 401 || jqXHR.status == 403){
+				alert("No esta autorizado a realizar esta acción")
+				return
+			}
+			
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}

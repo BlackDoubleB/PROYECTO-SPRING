@@ -1,0 +1,58 @@
+package edu.pe.idat.service;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.Reserva;
+import edu.pe.idat.repository.ReservaRepository;
+import jakarta.persistence.EntityNotFoundException;
+
+@Service
+public class ReservaService {
+	
+	@Autowired
+	private ReservaRepository reservaRepository;
+	
+	public List<Reserva> findAllByHorarioReservaFecha(String fecha) throws ParseException{
+		
+		java.sql.Date sqlDate = new java.sql.Date(System.currentTimeMillis());
+		
+		if(fecha != "") {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			java.util.Date parsedDate = dateFormat.parse(fecha);
+			sqlDate = new java.sql.Date(parsedDate.getTime());			
+		}
+		
+		return reservaRepository.findAllByHorarioReservaFecha(sqlDate);
+		
+	}
+	
+	public List<Reserva> findAllByHorarioReservaIdHorarioReserva(Integer idHorario){
+		
+		return reservaRepository.findAllByHorarioReservaIdHorarioReserva(idHorario);
+		
+	}
+	
+	public List<Reserva> findAllByConsumidorPersonaNombreCompletosContaining(String nombreCompletos){
+		
+		return reservaRepository.findAllByConsumidorPersonaNombreCompletosContaining(nombreCompletos);
+		
+	}
+	
+	public Reserva findById(Integer idReserva) {
+		
+		var reserva = reservaRepository.findById(idReserva);
+		
+		if(!reserva.isPresent()) {
+			throw new EntityNotFoundException("No se encontró el estado con id ".concat(idReserva.toString()));
+		}
+		
+		return reserva.get();
+		
+	}
+	
+}

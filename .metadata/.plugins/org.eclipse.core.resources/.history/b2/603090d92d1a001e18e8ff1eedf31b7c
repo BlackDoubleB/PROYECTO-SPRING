@@ -1,0 +1,5 @@
+package edu.pe.idat.security;
+
+public class JwtTokenUtils {
+
+}

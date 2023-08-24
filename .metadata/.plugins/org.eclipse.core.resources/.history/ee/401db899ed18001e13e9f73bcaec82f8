@@ -1,0 +1,101 @@
+$(document).ready(function() { 
+    habilitarBtnRegistrarHorarioReserva();
+    habilitarBtnEliminarHorarioReserva();
+    habilitarBtnConfirmarEliminarHorario();
+});
+
+function habilitarBtnConfirmarEliminarHorario(){
+	$("#confirmar-eliminar-horario").click(function(){
+		confirmarEliminarHorario()
+	})
+}
+
+function habilitarBtnEliminarHorarioReserva(){
+	$(".btn-eliminar-horario").click(function(){
+		eliminarHorarioReserva(this)
+	})
+}
+
+function habilitarBtnRegistrarHorarioReserva(){
+	$("#registrar-horario-reserva").click(function(){
+		registrarHorarioReserva()
+	})
+}
+
+function confirmarEliminarHorario(){
+	let row = $("table tbody tr.selected");
+	
+	if(!row){
+		alert("Debe seleccionar una fila a eliminar.")
+		return;
+	}
+	
+	let idHorario = $(row).attr("data-id-horario")
+	
+	let data = {
+		idHorario
+	}
+	
+	$.ajax({
+        type: 'DELETE',
+        url: '/api/horario-reserva/delete',
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+			console.log(response)
+			
+			if(!response.success){
+				alert(response.message)
+				return;				
+			}
+			
+            location.reload();
+        },
+        error: function (jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+        }
+	});
+}
+
+function eliminarHorarioReserva(e){
+	$("table tbody tr").removeClass("selected")
+	
+	$(e.closest("tr")).toggleClass("selected");
+	console.log(e.closest("tr"));
+}
+
+function registrarHorarioReserva(){
+	let fecha = $("#fecha-reserva").val();
+	let horario = $("#horario-reserva").val();
+	let mesas = $("#mesas-reserva").val();
+	
+	let data = {
+        fecha: fecha,
+        horario: horario,
+        numeroMesas: mesas
+    };
+	
+	console.log(data)
+	
+	$.ajax({
+        type: 'POST',
+        url: '/api/horario-reserva/create',
+        contentType: "application/json",
+        data: JSON.stringify(data),
+        success: function(response) {
+			console.log(response)
+			
+			if(!response.success){
+				alert(response.message)
+				return;				
+			}
+			
+            location.reload();
+        },
+        error: function (jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+        }
+	});
+}

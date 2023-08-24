@@ -1,0 +1,46 @@
+$(document).ready(function() {
+	habilitarBtnBuscar()
+	
+	configurarValoresPorDefecto()
+});
+
+function habilitarBtnBuscar(){
+	$("#btn-buscar").click(function(){
+		procesarBusquedaReservas(this)
+	})
+}
+
+function configurarValoresPorDefecto() {
+	
+	let fechaInput = document.getElementById("fecha-reserva")
+
+	fechaInput.value = dayjs().format("YYYY-MM-DD")
+
+}
+
+function procesarBusquedaReservas(e){
+	let fecha = $(e).val()
+	
+	$.ajax({
+		type: 'GET',
+		url: '/mis-reservas/combo-horario',
+		data: data,
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".combo-horarios").html(response)
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+
+			if (jqXHR.status == 401 || jqXHR.status == 403) {
+				alert("No esta autorizado a realizar esta acción")
+				return
+			}
+
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}

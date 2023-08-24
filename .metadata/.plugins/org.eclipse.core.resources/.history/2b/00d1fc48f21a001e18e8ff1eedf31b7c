@@ -1,0 +1,87 @@
+$(document).ready(function() {
+	habilitarBtnRegistrar()
+	//habilitarBtnRegresar()
+});
+
+function habilitarBtnRegistrar(){
+	$("#btn-registrar").click(function(){
+		procesarRegistroUsuario()
+	})
+}
+
+function procesarRegistroUsuario(){
+	let contrasena = $("#contrasena").val()
+	let confirmContrasena = $("#confirm-contrasena").val()
+	let nombres = $("#nombres").val()
+	let dni = $("#dni").val()
+	let telefono = $("#telefono").val()
+	let correo = $("#correo").val()
+	let rol = "2"
+	let usuario = $("#usuario").val()
+
+	if (!contrasena || !confirmContrasena) {
+		alert("Debe ingresar una contraseña.")
+		return;
+	}
+
+	if (!nombres) {
+		alert("Debe ingresar los Nombres del Usuario.")
+		return;
+	}
+
+	if (!dni) {
+		alert("Debe ingresar el Dni del Usuario.")
+		return;
+	}
+
+	if (!telefono) {
+		alert("Debe ingresar el teléfono del Usuario.")
+		return;
+	}
+
+	if (!correo) {
+		alert("Debe ingresar el correo del Usuario.")
+		return;
+	}
+
+	if (!usuario) {
+		alert("Debe ingresar un Nombre de Usuario.")
+		return;
+	}
+
+	if (contrasena != confirmContrasena) {
+		alert("Las contraseñas no coinciden.")
+		return;
+	}
+
+	let data = {
+		nombreCompletos: nombres,
+		dni,
+		telefono,
+		correo,
+		rol,
+		usuario,
+		contrasena
+	}
+
+	$.ajax({
+		type: 'POST',
+		url: '/api/usuario/create',
+		contentType: "application/json",
+		data: JSON.stringify(data),
+		success: function(response) {
+			if (!response.success) {
+				alert(response.message)
+				return;
+			}
+
+			$("#modalRegistrar").modal("show")
+			
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}

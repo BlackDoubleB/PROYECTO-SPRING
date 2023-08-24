@@ -1,0 +1,15 @@
+$(document).ready(function() {
+	habilitarComboFechasOnChange()
+});
+
+function habilitarComboFechasOnChange(){
+	$("#fecha-reserva").change(function(){
+		obtenerHorariosPorFecha(this)
+	})
+}
+
+function obtenerHorariosPorFecha(e){
+	let fecha = $(e).val()
+	
+	console.log(fecha)
+}

@@ -1,0 +1,60 @@
+package edu.pe.idat.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.pe.idat.model.Consumidor;
+import edu.pe.idat.model.EstadoReserva;
+import edu.pe.idat.model.HorarioReserva;
+import edu.pe.idat.model.Reserva;
+import edu.pe.idat.repository.ReservaRepository;
+import edu.pe.idat.request.ReservaCreateRequest;
+
+@Service
+public class ReservaService {
+
+	@Autowired
+	private ConsumidorService consumidorService;
+	
+	@Autowired
+	private HorarioReservaService horarioReservaService;
+	
+	@Autowired
+	private EstadoReservaService estadoReservaService;
+	
+	@Autowired
+	private ReservaRepository reservaRepository;
+	
+	public Reserva create(ReservaCreateRequest request) {
+		
+		Consumidor consumidor = consumidorService.findById(Integer.parseInt(request.getIdConsumidor()));
+		
+		HorarioReserva horario = horarioReservaService.findById(Integer.parseInt(request.getIdHorarioReserva()));
+		
+		EstadoReserva estado = estadoReservaService.findById(1);
+		
+		Reserva ultimaReserva = reservaRepository.findFirstByOrderByIdReservaDesc();
+		String ticket = "A00001";
+		
+		if(ultimaReserva != null) {
+			String ultimoTicket = ultimaReserva.getTicket();
+			String numeros = ultimoTicket.substring(1);
+			int t = Integer.parseInt(numeros);
+			
+			ticket = String.format("A%05d", t);
+		}
+		
+		
+		Reserva reserva = new Reserva();
+		reserva.setCantidadPersonas(Integer.parseInt(request.getNumeroPersonas()));
+		reserva.setComentariosAdicionales(request.getComentarios());
+		reserva.setTicket(ticket);
+		reserva.setConsumidor(consumidor);
+		reserva.setEstadoReserva(estado);
+		reserva.setHorarioReserva(horario);
+		
+		return reservaRepository.save(reserva);
+		
+	}
+	
+}

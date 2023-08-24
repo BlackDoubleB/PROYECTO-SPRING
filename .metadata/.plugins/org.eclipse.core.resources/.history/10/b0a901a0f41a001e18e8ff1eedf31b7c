@@ -1,0 +1,74 @@
+$(document).ready(function() {
+	habilitarBtnIngresar()
+});
+
+function habilitarBtnIngresar(){
+	$("#btn-ingresar").click(function(e){
+		procesarIngreso(e)
+	})
+}
+
+function procesarIngreso(e){
+	e.preventDefault()
+	
+	let username = $("#username").val()
+	let password = $("#password").val()
+	
+	const data = {
+		username,
+		password
+	}
+	
+	$.ajax({
+		type: 'POST',
+		url: '/login',
+		contentType: "application/json",
+		data: JSON.stringify(data),
+		success: function(e, s, request) {
+			let token = request.getResponseHeader("authorization")
+			
+			if (!token || !token.startsWith("Bearer ")){
+				alert("No ha sido posible autenticar al usuario ingresado.")
+				return;
+			}
+			
+			if(!localStorage){
+				alert("El navegador no soporta LocalStorage.")
+				return;
+			}
+			
+			localStorage.setItem("at", token.replace("Bearer ", ""))
+			
+			//location.href = "/reservas";
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			
+			if(jqXHR.status == 401 || jqXHR.status == 403){
+				alert("Usuario y/o Contraseña incorrectas")
+				return
+			}
+			
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}
+
+//function irA(ruta){
+//    console.log(location.href)
+//    location.href = ruta;
+//}
+//
+//function accederACrearReserva(){
+//    let btn = document.getElementById("btnIngresar")
+//
+//    btn.addEventListener("click", function(evt){
+//        evt.preventDefault();
+//        console.log("in")
+//        irA("crear-reserva-c.html")
+//    })
+//}
+//
+//document.addEventListener("DOMContentLoaded", function(event) { 
+//    accederACrearReserva();
+//  });

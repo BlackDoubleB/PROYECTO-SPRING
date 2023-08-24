@@ -1,0 +1,44 @@
+$(document).ready(function() { 
+    habilitarBtnRegistrarHorarioReserva();
+});
+
+function habilitarBtnRegistrarHorarioReserva(){
+	/*let btnRegistrarHorarioReserva = document.getElementById("registrar-horario-reserva")
+	
+	btnRegistrarHorarioReserva.addEventListener('click', function(){
+    	registrarHorarioReserva()
+	})*/
+	
+	$("#registrar-horario-reserva").click(function(){
+		registrarHorarioReserva()
+	})
+}
+
+function registrarHorarioReserva(){
+	let fecha = $("#fecha-reserva").val();
+	let horario = $("#horario-reserva").val();
+	let mesas = $("#mesas-reserva").val();
+	
+	console.log(fecha)
+	console.log(horario)
+	console.log(mesas)
+	
+	$.ajax({
+        type: 'POST',
+        url: '/api/horario-reserva/create',
+        contentType: "application/json",
+        data: {
+            fecha: fecha,
+            horario: horario,
+            numeroMesas: mesas
+        },
+        success: function(response) {
+			console.log(response)
+             location.reload();
+        },
+        error: function (jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+        }
+	});
+}

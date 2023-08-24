@@ -1,0 +1,5 @@
+package edu.pe.idat.repository;
+
+public interface HorarioReservaRepository {
+
+}

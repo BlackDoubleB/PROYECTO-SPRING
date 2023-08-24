@@ -1,0 +1,56 @@
+$(document).ready(function() {
+	habilitarBtnIngresar()
+});
+
+function habilitarBtnIngresar(){
+	$("#btn-ingresar").click(function(e){
+		procesarLogin(e)
+	})
+}
+
+function procesarLogin(e){
+	e.preventDefault()
+	
+	let username = $("#username").val()
+	let password = $("#password").val()
+	
+	const data = {
+		username,
+		password
+	}
+	
+	$.ajax({
+		type: 'POST',
+		url: '/login',
+		contentType: "application/json",
+		data: JSON.stringify(data),
+		success: function(response, textStatus, request) {
+			console.log(response)
+			console.log(textStatus)
+			console.log(request.getResponseHeader("authorization"))
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}
+
+//function irA(ruta){
+//    console.log(location.href)
+//    location.href = ruta;
+//}
+//
+//function accederACrearReserva(){
+//    let btn = document.getElementById("btnIngresar")
+//
+//    btn.addEventListener("click", function(evt){
+//        evt.preventDefault();
+//        console.log("in")
+//        irA("crear-reserva-c.html")
+//    })
+//}
+//
+//document.addEventListener("DOMContentLoaded", function(event) { 
+//    accederACrearReserva();
+//  });

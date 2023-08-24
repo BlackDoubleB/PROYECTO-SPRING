@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Lab 03</title>
+
+</head>
+
+<body>
+<header th:replace="Home/fragment_home::header"></header>
+    <h1>Práctica Lección 03</h1>
+
+    <div></div><div></div><div></div><div></div>
+
+    <h1>Ejemplo de un objeto y expresión de selección:</h1>
+
+    <div th:object="${objCliente}">
+
+    <span th:text="*{nombre}">pepito</span>
+
+    <span th:text="*{apellidoPaterno}"></span>
+
+    <span th:text="*{apellidoMaterno}"></span>
+
+    <span th:text="${objCliente.documentoIdentidad}"></span>
+
+    </div>
+
+    <div></div><div></div><div></div><div></div>
+
+    
+
+    <h1>Escribir una lista de objetos:</h1>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th> Nombre </th>
+
+                <th> Apellido Paterno </th>
+
+                <th> Apellido Materno </th>
+
+                <th> Documento de Identidad </th>
+
+                <th> Numero de Celular </th>
+
+                <th> Email </th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+        <tr th:if="${listaCliente.empty}">
+
+                <td colspan="2"> Lista sin datos</td>
+
+            </tr>
+
+            <tr th:each="Cliente : ${listaCliente}">
+
+                <td><span th:text="${Cliente.nombre}"> </span></td>
+
+                <td><span th:text="${Cliente.apellidoPaterno}"> </span></td>
+
+                <td><span th:text="${Cliente.apellidoMaterno}"> </span></td>
+
+                <td><span th:text="${Cliente.documentoIdentidad}"> </span></td>
+
+                <td><span th:text="${Cliente.numeroCelular}"> </span></td>
+
+                <td><span th:text="${Cliente.email}"> </span></td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+    
+
+    <div></div><div></div><div></div><div></div>
+
+    <div align="center">
+
+            <h1>Ejemplo de formulario</h1>
+
+            <a href="/User/showFormRegister">Click aqui para registrar usuario</a>
+
+    </div>
+
+    
+
+</body>
+
+</html>

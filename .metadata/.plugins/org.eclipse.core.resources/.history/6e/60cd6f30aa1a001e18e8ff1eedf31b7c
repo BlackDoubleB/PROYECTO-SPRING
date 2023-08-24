@@ -1,0 +1,34 @@
+$(document).ready(function() {
+	habilitarBtnIngresar()
+});
+
+function habilitarBtnIngresar(){
+	$("#btn-ingresar").click(function(e){
+		procesarLogin(e)
+	})
+}
+
+function procesarLogin(e){
+	e.preventDefault()
+	
+	console.log("evento login")
+}
+
+//function irA(ruta){
+//    console.log(location.href)
+//    location.href = ruta;
+//}
+//
+//function accederACrearReserva(){
+//    let btn = document.getElementById("btnIngresar")
+//
+//    btn.addEventListener("click", function(evt){
+//        evt.preventDefault();
+//        console.log("in")
+//        irA("crear-reserva-c.html")
+//    })
+//}
+//
+//document.addEventListener("DOMContentLoaded", function(event) { 
+//    accederACrearReserva();
+//  });

@@ -1,0 +1,25 @@
+$(document).ready(function() { 
+    habilitarInputFechaOnChange();
+});
+
+function habilitarInputFechaOnChange(){
+	$("#fecha-reserva").change(function(){
+		
+		let fecha = $(this).val()		
+		
+		console.log(fecha)
+		
+		$.ajax({
+	        type: 'GET',
+	        url: '/disponibilidad/table/' + fecha,
+	        data: {},
+	        success: function(data) {
+				console.log(data)
+	        },
+	        error: function (jqXHR) {
+				console.log(jqXHR)
+				alert('Error: ' + jqXHR.status)
+	        }
+		});
+	})
+}

@@ -1,0 +1,103 @@
+$(document).ready(function() {
+	habilitarBtnBuscar()
+	habilitarBtnEditarReserva()
+	
+	configurarValoresPorDefecto()
+});
+
+function habilitarBtnEditarReserva(){
+	$(".btn-editar-reserva").click(function(){
+		obtenerModalEditarReserva(this)
+	})
+}
+
+
+function habilitarBtnBuscar(){
+	$("#btn-buscar").click(function(){
+		procesarBusquedaReservas()
+	})
+}
+
+function habilitarBtnConfirmarEditar(){
+	$("#btn-confirmar-editar").click(function(){
+		procesarEditarReserva()
+	})
+}
+
+function configurarValoresPorDefecto() {
+	
+	let fechaInput = document.getElementById("fecha-reserva")
+
+	fechaInput.value = dayjs().format("YYYY-MM-DD")
+
+}
+
+function procesarEditarReserva(){
+	
+}
+
+function obtenerModalEditarReserva(e){
+	const idReserva = $(e).attr("data-id-reserva")
+	
+	const data = {
+		idReserva
+	}
+	
+	$.ajax({
+		type: 'GET',
+		url: '/mis-reservas/modal-editar',
+		data: data,
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".modals").html(response)
+			
+			$("#modalEditar").modal("show")
+			
+			habilitarBtnConfirmarEditar()
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+
+			if (jqXHR.status == 401 || jqXHR.status == 403) {
+				alert("No esta autorizado a realizar esta acción")
+				return
+			}
+
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}
+
+function procesarBusquedaReservas(){
+	let fecha = $("#fecha-reserva").val()
+	
+	const data = {
+		fecha
+	}
+	
+	$.ajax({
+		type: 'GET',
+		url: '/mis-reservas/table',
+		data: data,
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".datagrid").html(response)
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+
+			if (jqXHR.status == 401 || jqXHR.status == 403) {
+				alert("No esta autorizado a realizar esta acción")
+				return
+			}
+
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}

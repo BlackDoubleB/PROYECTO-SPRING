@@ -1,0 +1,145 @@
+package edu.pe.idat.controller;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import edu.pe.idat.model.EstadoTrabajador;
+import edu.pe.idat.model.HorarioReserva;
+import edu.pe.idat.model.Trabajador;
+import edu.pe.idat.service.EstadoTrabajadorService;
+import edu.pe.idat.service.HorarioReservaService;
+import edu.pe.idat.service.RolesService;
+import edu.pe.idat.service.TrabajadorService;
+
+@Controller
+public class RoutesController {
+
+	@Autowired
+	private HorarioReservaService horarioReservaService;
+
+	@Autowired
+	private TrabajadorService trabajadorService;
+	
+	@Autowired
+	private RolesService rolesService;
+	
+	@Autowired
+	private EstadoTrabajadorService estadoTrabajadorService;
+	
+	@GetMapping("/")
+	public String index(Model model) {
+		return "index";
+	}
+	
+	@GetMapping("/configuracion")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PERSONAL')")
+	public String configuracion(Model model) {
+		
+		model.addAttribute("horarios", horarioReservaService.findAll());
+		
+		return "configuracion";
+	}
+	
+	@GetMapping("/reservas")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PERSONAL')")
+	public String reservas(Model model) {
+		return "reservas";
+	}
+	
+	@GetMapping("/disponibilidad")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PERSONAL')")
+	public String disponibilidad(Model model) throws ParseException {
+		
+		Date fechaActual = new Date(System.currentTimeMillis());
+        SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaFormateada = formato.format(fechaActual);
+        
+        List<HorarioReserva> horarios = horarioReservaService.findAllByFecha(fechaFormateada);
+		
+        List<HorarioReserva> horariosDisponibles = horarios.stream()
+        		.filter(horario -> horario.getNumeroMesas() > 0)
+        		.collect(Collectors.toList());
+        
+		model.addAttribute("horarios", horariosDisponibles);
+		
+		return "disponibilidad";
+	}
+	
+	@GetMapping("/disponibilidad/table/{fecha}")
+	@PreAuthorize("hasAnyRole('ADMINISTRADOR', 'PERSONAL')")
+	public String disponibilidadTable(Model model, @Param("fecha")String fecha) throws ParseException {
+		
+		List<HorarioReserva> horarios = horarioReservaService.findAllByFecha(fecha);
+		
+		List<HorarioReserva> horariosDisponibles = horarios.stream()
+				.filter(horario -> horario.getNumeroMesas() > 0)
+				.collect(Collectors.toList());
+		
+		model.addAttribute("horarios", horariosDisponibles);
+		
+		return "fragments/disponibilidad-table :: table";
+	}
+	
+	@GetMapping("/usuarios")
+	@PreAuthorize("hasRole('ADMINISTRADOR')")
+	public String usuarios(Model model) {
+		
+		List<Trabajador> trabajadores;
+		
+		try {
+			trabajadores = trabajadorService.findAll();
+		}catch(Exception e) {
+			trabajadores = new ArrayList<Trabajador>();
+		}
+		
+		model.addAttribute("trabajadores", trabajadores);
+		
+		return "usuarios";
+	}
+	
+	@GetMapping("/usuarios/table")
+	@PreAuthorize("hasRole('ADMINISTRADOR')")
+	public String usuariosTable(Model model, @Param("nombre") String nombre) throws Exception{
+		
+		model.addAttribute("trabajadores", trabajadorService.findAllByPersonaNombreCompletosContaining(nombre));
+		
+		return "fragments/usuarios-table :: table";
+	}
+	
+	@GetMapping("/usuarios/modal-crear")
+	@PreAuthorize("hasRole('ADMINISTRADOR')")
+	public String usuariosModalCrear(Model model) throws Exception{
+		
+		model.addAttribute("roles", rolesService.findAll());
+		
+		return "fragments/usuarios-modal-crear :: modal-crear";
+	}
+	
+	@GetMapping("/usuarios/modal-editar")
+	@PreAuthorize("hasRole('ADMINISTRADOR')")
+	public String usuariosModalEditar(Model model, @Param("id") String idTrabajador) throws Exception{
+		
+		model.addAttribute("trabajador", trabajadorService.findById(Integer.parseInt(idTrabajador)));
+		model.addAttribute("roles", rolesService.findAll());
+		model.addAttribute("estados", estadoTrabajadorService.findAll());
+		
+		return "fragments/usuarios-modal-editar :: modal-editar";
+	}
+	
+	@RequestMapping("*")
+    public String handleNotFound() {
+        return "redirect:/reservas";
+    }
+}

@@ -1,0 +1,46 @@
+$(document).ready(function() {
+	habilitarBtnBuscarReservas()
+});
+
+function habilitarBtnBuscarReservas(){
+	$("#btn-buscar-reserva").click(function(e){
+		procesarBusquedaReservas(e)
+	})
+}
+
+function procesarBusquedaReservas(e){
+	e.preventDefault();
+	
+	cargarTableUsuarios()
+}
+
+function cargarTableUsuarios() {
+	const nombres = $("#nombres-buscar-reserva").val()
+	
+	$.ajax({
+		type: 'GET',
+		url: '/reservas/table',
+		data: {
+			nombres
+		},
+		success: function(response) {
+			if (!response) {
+				return;
+			}
+
+			$(".datagrid").html(response)
+			
+			//habilitarBtnEditar()
+		},
+		error: function(jqXHR) {
+			console.log(jqXHR)
+			
+			if(jqXHR.status == 401 || jqXHR.status == 403){
+				alert("No esta autorizado a realizar esta acción")
+				return
+			}
+			
+			alert('Error: ' + jqXHR.status)
+		}
+	});
+}
